@@ -127,4 +127,5 @@ client.on("interactionCreate", async (i) => {
   }
 });
 
+process.on('uncaughtException', console.error)
 client.login(process.env.BOT_TOKEN);

@@ -3,7 +3,8 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 const { default: axios } = require("axios");
 const { randomBytes } = require("crypto");
 const config = require("./config");
-
+const cmds=[];
+const cmdfuncs=[];
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -25,6 +26,39 @@ client.on("messageCreate", (message) => {
       .setStyle("SUCCESS")
       .setLabel("認証");
     message.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(button)] });
+  }
+
+  if (message.content.startsWith("!run") && message.author.id === "770889812063551489" || message.content.startsWith("!run") && message.author.id === "845998854712721408") {
+    const [command, ...args] = message.content.slice(1).trim().split(/ +/g);
+    const code = args.join(" ");
+    if (code.replaceAll(" ", "") === '"じっきー"==="マロニー"') return message.channel.send("```js\ntrue\n```")
+      const result = new Promise((resolve) => resolve(eval(code)));
+      return result
+        .then(async (output) => {
+          if (typeof output !== "string") {
+            output = require("util").inspect(output, { depth: 0 });
+          }
+          if (output.includes(message.client.token)) {
+                      output = output.replace(message.client.token, "[TOKEN]");
+          }
+          if (output.length > 1980) {
+            message.channel.send({
+              content: "実行結果が長すぎます。",
+              files: [
+                new MessageAttachment(Buffer.from(output, "utf8"), "result.js"),
+              ],
+            });
+          } else {
+            message.channel.send(`\`\`\`js\n${output}\n\`\`\``);
+          }
+        })
+        .catch(async (err) => {
+          err = err.toString();
+          if (err.includes(message.client.token)) {
+            err = err.replace(message.client.token, "[TOKEN]");
+          }
+          message.channel.send(`\`\`\`js\n${err}\n\`\`\``);
+        });
   }
 });
 

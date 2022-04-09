@@ -90,7 +90,7 @@ client.on("interactionCreate", async (i) => {
                 .setStyle("SUCCESS")
                 .setLabel("プロジェクトに入力しました");
               uuid = `${getRandomInt(984932532).toString()}`;
-              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード(`XXXXXXXXX`形式)を、https://scratch.mit.edu/projects/673753313/ に入力してください。\nもしあなたがNew Scratcherの場合こちらに問い合わせてください：https://scratch.mit.edu/studios/31009600/comments", embeds: [{
+              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード(`XXXXXXXXX`形式)を、https://scratch.mit.edu/projects/673753313/fullscreen/ に入力してください。\nもしあなたがNew Scratcherの場合こちらに問い合わせてください：https://scratch.mit.edu/studios/31009600/comments", embeds: [{
                 description: `\`\`\`\n${uuid}\n\`\`\``
               }], components: [new MessageActionRow().addComponents(but)] });
               

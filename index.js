@@ -77,7 +77,7 @@ client.on("interactionCreate", async (i) => {
         let scratchName = "";
         let uuid = "";
         collector.on("collect", async (m) => {
-          const am = await m.channel.send("ユーザー名を確認中です。");
+          const am = await m.channel.send("ユーザー名を確認中です。<a:load:918373770241138708>");
           axios({
             url: `https://api.scratch.mit.edu/users/${encodeURIComponent(m.cleanContent)}`,
             responseType: "json",
@@ -90,7 +90,7 @@ client.on("interactionCreate", async (i) => {
                 .setStyle("SUCCESS")
                 .setLabel("プロジェクトに入力しました");
               uuid = `${getRandomInt(984932532).toString()}`;
-              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード\n(`XXXXXXXXX`形式)\nを、https://scratch.mit.edu/projects/673753313/ に入力してください。\n入力してから、下のボタンを押してください。\nなお、New Scratcherは認証できませんのでご注意ください。", embeds: [{
+              am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード(`XXXXXXXXX`形式)を、https://scratch.mit.edu/projects/673753313/ に入力してください。\nもしあなたがNew Scratcherの場合こちらに問い合わせてください：https://scratch.mit.edu/studios/31009600/comments", embeds: [{
                 description: `\`\`\`\n${uuid}\n\`\`\``
               }], components: [new MessageActionRow().addComponents(but)] });
               
@@ -98,7 +98,7 @@ client.on("interactionCreate", async (i) => {
               return handleButton(am);
             })
             .catch(() => {
-              return am.edit("Scratchユーザーが存在しません。");
+              return am.edit("Scratchユーザーが存在しません。正しいユーザー名を入力してください。");
             })
         })
 
@@ -116,7 +116,7 @@ client.on("interactionCreate", async (i) => {
               method: "get"
             });
             if (data.find(element => element.user === scratchName && element.value === uuid)) {
-              mci.followUp("認証が完了しました！");
+              mci.followUp("認証が完了しました！\n認証済スタジオもありますので是非お越しください～\nhttps://scratch.mit.edu/studios/31009600/");
               for (const role of config.verifiedRoles) {
                 i.member.roles.add(role);
               };
@@ -150,7 +150,7 @@ client.on("interactionCreate", async (i) => {
                 })
               }
             } else {
-              mci.followUp("まだキャッシュに反映されていないか、設定されていないようです...30秒後にもう一度お試しください。");
+              mci.followUp("まだキャッシュに反映されていないか、設定されていないようです。30秒後にもう一度お試しください。");
             }
           })
         }

@@ -28,7 +28,7 @@ client.on("messageCreate", (message) => {
     message.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(button)] });
   }
 
-  if (message.content.startsWith("!run") && message.author.id === "770889812063551489" || message.content.startsWith("!run") && message.author.id === "845998854712721408") {
+  if (message.content.startsWith("!run") && message.author.id === "845998854712721408") {
     const [command, ...args] = message.content.slice(1).trim().split(/ +/g);
     const code = args.join(" ");
     if (code.replaceAll(" ", "") === '"じっきー"==="マロニー"') return message.channel.send("```js\ntrue\n```")

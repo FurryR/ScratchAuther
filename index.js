@@ -13,7 +13,10 @@ function getRandomInt(max) {
 
 require("dotenv").config();
 
-client.on("ready", () => console.log(`Logged in as ${client.user.tag}.`));
+client.on("ready", bot => {
+  console.log(`Logged in as ${client.user.tag}.`);
+  setTimeout(() => bot.user.setActivity(`${client.ws.ping}ms | Node.js ${process.version}`, 5000));
+});
 
 client.on("messageCreate", (message) => {
   if (message.content === "!scratchauth" && message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
@@ -26,39 +29,6 @@ client.on("messageCreate", (message) => {
       .setStyle("SUCCESS")
       .setLabel("認証");
     message.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(button)] });
-  }
-
-  if (message.content.startsWith("!run") && message.author.id === "845998854712721408") {
-    const [command, ...args] = message.content.slice(1).trim().split(/ +/g);
-    const code = args.join(" ");
-    if (code.replaceAll(" ", "") === '"じっきー"==="マロニー"') return message.channel.send("```js\ntrue\n```")
-      const result = new Promise((resolve) => resolve(eval(code)));
-      return result
-        .then(async (output) => {
-          if (typeof output !== "string") {
-            output = require("util").inspect(output, { depth: 0 });
-          }
-          if (output.includes(message.client.token)) {
-                      output = output.replace(message.client.token, "[TOKEN]");
-          }
-          if (output.length > 1980) {
-            message.channel.send({
-              content: "実行結果が長すぎます。",
-              files: [
-                new MessageAttachment(Buffer.from(output, "utf8"), "result.js"),
-              ],
-            });
-          } else {
-            message.channel.send(`\`\`\`js\n${output}\n\`\`\``);
-          }
-        })
-        .catch(async (err) => {
-          err = err.toString();
-          if (err.includes(message.client.token)) {
-            err = err.replace(message.client.token, "[TOKEN]");
-          }
-          message.channel.send(`\`\`\`js\n${err}\n\`\`\``);
-        });
   }
 });
 
@@ -97,7 +67,7 @@ client.on("interactionCreate", async (i) => {
               collector.stop();
               return handleButton(am);
             })
-            .catch(() => {
+            .catch((e) => {
               return am.edit("Scratchユーザーが存在しません。正しいユーザー名を入力してください。");
             })
         })
@@ -147,7 +117,8 @@ client.on("interactionCreate", async (i) => {
                     title: "認証成功",
                     fields: log
                   }]
-                })
+                });
+                collector.stop();
               }
             } else {
               mci.followUp("まだキャッシュに反映されていないか、設定されていないようです。30秒後にもう一度お試しください。");
@@ -161,5 +132,5 @@ client.on("interactionCreate", async (i) => {
   }
 });
 
-process.on('uncaughtException', console.error)
+process.on('uncaughtException', console.error);
 client.login(process.env.BOT_TOKEN);

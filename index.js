@@ -58,7 +58,7 @@ client.on("interactionCreate", async (i) => {
                 .setCustomId("auth")
                 .setStyle("SUCCESS")
                 .setLabel("プロジェクトに入力しました");
-              uuid = `${getRandomInt(100000000, 999999999).toString()}`;
+              uuid = `${getRandomInt(1e9, 1e10-1).toString()}`;
               am.edit({ content: "ユーザー名の確認ができました。\n次に、下のコード(`XXXXXXXXX`形式)を、https://scratch.mit.edu/projects/673753313/fullscreen/ に入力してください。\nもしあなたがNew Scratcherの場合こちらに問い合わせてください：https://scratch.mit.edu/studios/31009600/comments", embeds: [{
                 description: `\`\`\`\n${uuid}\n\`\`\``
               }], components: [new MessageActionRow().addComponents(but)] });

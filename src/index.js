@@ -83,7 +83,9 @@ client.on("interactionCreate", async (i) => {
                         "ユーザー名を確認中です。<a:load:918373770241138708>"
                     );
                     axios({
-                        url: `https://api.scratch.mit.edu/users/${encodeURIComponent(m.cleanContent)}`,
+                        url: `https://api.scratch.mit.edu/users/${encodeURIComponent(
+                            m.cleanContent
+                        )}`,
                         responseType: "json",
                         method: "get",
                     })
@@ -95,8 +97,7 @@ client.on("interactionCreate", async (i) => {
                                 .setLabel("プロジェクトに入力しました");
                             uuid = `${getRandomInt(1e9, 1e10 - 1).toString()}`;
                             am.edit({
-                                content:
-                                    `ユーザー名の確認ができました。\n次に、下のコード(\`XXXXXXXXX\`形式)を、https://scratch.mit.edu/projects/${projectId}/fullscreen/ に入力してください。`,
+                                content: `ユーザー名の確認ができました。\n次に、下のコード(\`XXXXXXXXX\`形式)を、https://scratch.mit.edu/projects/${config.projectId}/fullscreen/ に入力してください。`,
                                 embeds: [
                                     {
                                         description: `\`\`\`\n${uuid}\n\`\`\``,
@@ -111,6 +112,7 @@ client.on("interactionCreate", async (i) => {
                             return handleButton(am);
                         })
                         .catch((e) => {
+                            console.error(e);
                             return am.edit(
                                 "Scratchユーザーが存在しません。正しいユーザー名を入力してください。"
                             );
@@ -126,7 +128,7 @@ client.on("interactionCreate", async (i) => {
                     collector.on("collect", async (mci) => {
                         await mci.deferReply();
                         const { data } = await axios({
-                            url: `https://clouddata.scratch.mit.edu/logs?projectid=${projectId}&limit=40&offset=0`,
+                            url: `https://clouddata.scratch.mit.edu/logs?projectid=${config.projectId}&limit=40&offset=0`,
                             responseType: "json",
                             method: "get",
                         });
@@ -137,18 +139,8 @@ client.on("interactionCreate", async (i) => {
                                     element.value === uuid
                             )
                         ) {
-                            axios({
-                                url: `https://scratch.mit.edu/site-api/users/curators-in/${studioId}/invite_curator/?usernames=${scratchName}`,
-                                method: "post",
-                            })
-                                .then(() => {
-                                    console.log(
-                                        `Invited ${scratchName} to ${studioId}`
-                                    );
-                                })
-                                .catch((e) => console.error(e));
                             mci.followUp(
-                                `認証が完了しました！\n認証済スタジオもありますので是非お越しください～\nhttps://scratch.mit.edu/studios/${studioId}/`
+                                `認証が完了しました！\n認証済スタジオもありますので是非お越しください～\nhttps://scratch.mit.edu/studios/${config.studioId}/`
                             );
                             for (const role of config.verifiedRoles) {
                                 i.member.roles.add(role);
